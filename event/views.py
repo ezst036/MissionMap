@@ -6,9 +6,9 @@ from . forms import EventForm, AccountVerificationForm
 
 from django.views.generic.base import TemplateView
 
-class EventsHomeView(TemplateView):
+class EventHomeView(TemplateView):
     
-    template_name = 'events/events.html'
+    template_name = 'event/events.html'
 
     def get_context_data(self, **kwargs):
         try: #Always return the first available
@@ -40,7 +40,7 @@ def reviewConfirm(request):
         #Go to main page and prevent null data errors
         event = Event.objects.filter(available=True)
     
-        return render(request, 'events/listcontainer.html', {'events':event})
+        return render(request, 'event/listcontainer.html', {'events':event})
 
    if request.method == "POST":
         #get item information
@@ -74,7 +74,7 @@ def reviewConfirm(request):
         payform.fields['description'].disabled = True
         payform.fields['price'].disabled = True
         
-        return render(request, 'events/reviewevent.html', {'payform': payform,
+        return render(request, 'event/reviewevent.html', {'payform': payform,
                                                            "STRIPE_PUBLIC_KEY": apikeys.stripepublic,
                                                            'userform': userform,
                                                            'event':event})
@@ -112,16 +112,16 @@ def chargeEvent(request):
             description=request.POST['item_name'],
             source=request.POST['stripeToken'],
         )
-        return render(request, 'events/charge.html')
+        return render(request, 'event/charge.html')
 
 def eventlist(request):
     event = Event.objects.filter(available=True)
     
-    return render(request, 'events/listcontainer.html', {'events':event})
+    return render(request, 'event/listcontainer.html', {'events':event})
 
 def eventdetail(request, id, slug):
     event=get_object_or_404(Event, id=id, slug=slug, available=True)
 
     event.price = event.price / 100
    
-    return render(request, 'events/detail.html', {'product':event})
+    return render(request, 'event/detail.html', {'product':event})

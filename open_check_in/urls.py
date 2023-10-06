@@ -9,7 +9,7 @@ from connect.views import connectview
 from connect.admin import connectadmin
 from tithe import views as titheview
 from checkout import views as checkoutview
-from events import views as events_views
+from event import views as event_views
 from missionmap import views as mission_views
 
 admin.site.site_header = "Open Check In Administration"
@@ -51,10 +51,10 @@ urlpatterns = [
     path('revieworder/', checkoutview.MainView.as_view(), name='revieworder'),
     path('complete/', checkoutview.SuccessView.as_view(), name='complete'),
     path('cancel/', checkoutview.CancelView.as_view(), name='cancel'),
-    path('reviewevent/', events_views.reviewConfirm, name='reviewevent'),
-    path('chargeevent/', events_views.chargeEvent, name='chargeevent'),
-    path('eventlist/', events_views.eventlist, name='eventlist'),
+    path('reviewevent/', event_views.reviewConfirm, name='reviewevent'),
+    path('chargeevent/', event_views.chargeEvent, name='chargeevent'),
+    path('eventlist/', event_views.eventlist, name='eventlist'),
     path('list/', checkoutview.productlist, name='productlist'),
-    path('event/<int:id>/<slug:slug>/', events_views.eventdetail, name='eventdetail'),
+    path('event/<int:id>/<slug:slug>/', event_views.eventdetail, name='eventdetail'),
     path('<slug:categoryslug>/', checkoutview.productlist, name='bycategory'),
 ]

@@ -1,5 +1,5 @@
 from django import forms
-from events.models import Event
+from event.models import Event
 from account.models import Account
 
 class EventForm(forms.ModelForm):

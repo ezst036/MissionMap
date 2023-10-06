@@ -30,7 +30,7 @@ INSTALLED_APPS = [
     'tithe.apps.TitheConfig',
     'checkin.apps.CheckinConfig',
     'checkout.apps.CheckoutConfig',
-    'events.apps.EventsConfig',
+    'event.apps.EventConfig',
     'connect',
     'account',
     'missionmap.apps.MissionmapConfig',

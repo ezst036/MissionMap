@@ -2,7 +2,7 @@ from django.contrib import admin
 from . models import Event, StripeKeys
 
 @admin.register(Event)
-class EventsAdmin(admin.ModelAdmin):
+class EventAdmin(admin.ModelAdmin):
     list_display = ['name', 'slug', 'description', 'price']
     prepopulated_fields = {'slug':('name',)}
 

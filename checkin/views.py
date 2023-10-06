@@ -16,7 +16,7 @@ from datetime import datetime
 import warnings
 from urllib.parse import unquote_plus
 import json
-from events.models import Event
+from event.models import Event
 
 def login(request):
     if request.method == 'POST':
