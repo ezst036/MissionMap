@@ -1,6 +1,4 @@
 from django.db import models
-from twilio.rest import Client
-from account.models import UIPrefs
 
 messagetypes = [
     ('newmember', 'New member'),
@@ -25,30 +23,25 @@ class ContactConnect(models.Model):
         return self.title
     
     def save(self, *args, **kwargs):
-        try:
-            prefs = TwilioPrefs.objects.all()[0]
-        except IndexError:
-            prefs = {
-                'acctsid': 'TWILIO_ACCOUNT_SID',
-                'accttoken': 'TWILIO_AUTH_TOKEN',
-                'accountnumber': '+15017122661',
-                'recipientnumber': '+15558675310'
-            }
+        #try:
+        #    prefs = TwilioPrefs.objects.all()[0]
+        #except IndexError:
+        #    self.messagetype = 'newmember'
         
         #Should not send notifications for new member Connect messages
         #Confirm default sid and token information to prevent errors
-        if self.messagetype == 'prayer':
+        #if self.messagetype == 'prayer':
 
-            if not (prefs.acctsid == 'TWILIO_ACCOUNT_SID' or 
-                prefs.accttoken == 'TWILIO_AUTH_TOKEN'):
+            #if not (prefs.acctsid == 'TWILIO_ACCOUNT_SID' or 
+                #prefs.accttoken == 'TWILIO_AUTH_TOKEN'):
             
-                client = Client(prefs.acctsid, prefs.accttoken)
-                message = client.messages.create(
-                                            body=f'message sent from: - {self.first_name} {self.last_name} - {self.title} - {self.body}',
-                                            from_=prefs.accountnumber,
-                                            to=prefs.recipientnumber
-                                        )
+                #client = Client(prefs.acctsid, prefs.accttoken)
+                #message = client.messages.create(
+                #                            body=f'message sent from: - {self.first_name} {self.last_name} - {self.title} - {self.body}',
+                #                            from_=prefs.accountnumber,
+                #                            to=prefs.recipientnumber
+                #                        )
 
-                print(message.sid)
+                #print(message.sid)
 
         return super().save(*args, **kwargs)
