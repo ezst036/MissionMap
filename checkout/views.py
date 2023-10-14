@@ -30,11 +30,26 @@ def removefromcart(request, productid):
     return redirect('cartdetails')
 
 def cartdetails(request):
+    enablecontinue = True
+    apikeys = StripeKeys.objects.all().first()
+
+    try: #Checkout button disabled if stripe keys null or default values
+        stripe.api_key = apikeys.stripesecret
+    except Exception as e:
+        messages.success(request, f'API keys not yet setup by the administrator.')
+        enablecontinue = False
+    
+    if not (apikeys.stripesecret == 'STRIPE_PUBLIC_KEY' or
+        apikeys.stripepublic == 'STRIPE_SECRET_KEY'):
+        enablecontinue = False
+        #Preference exists but not setup
+        messages.success(request, f'API keys are improperly configured, please contact an administrator.')
+    
     cart=ShoppingCart(request)
     for item in cart:
         item['update_quantity_form'] = CartForm(initial={'quantity':item['quantity'], 'override':True})
     
-    return render(request, 'checkout/shoppingcart.html', {'cart':cart})
+    return render(request, 'checkout/shoppingcart.html', {'cart':cart, 'enablecontinue':enablecontinue})
 
 def productlist(request, categoryslug=None):
     category = None
@@ -57,13 +72,8 @@ class MainView(TemplateView):
     template_name = "checkout/revieworder.html"
     
     def get_context_data(self, **kwargs):
-        try: #Always return the first available
-            apikeys = StripeKeys.objects.all().first()
-        except Exception as e:
-            #Deleted keys
-            #messages.success(request, f'API keys not yet setup by the administrator.')
-            print(e)
-        
+        # apikeys null check above in cartdetails function
+        apikeys = StripeKeys.objects.all().first()      
         stripe.api_key = apikeys.stripesecret
 
         total_price_in_cart=0

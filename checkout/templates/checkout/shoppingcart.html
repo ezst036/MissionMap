@@ -54,6 +54,6 @@
     </table>
     <p class="d-flex justify-content-end">
         <a href="{% url "productlist" %}" class="btn btn-outline-info mr-2">Continue Shopping</a>
-        <a href="{% url "revieworder" %}" class="btn btn-info">CheckOut</a>
+        <a href="{% url "revieworder" %}" {% if enablecontinue %} class="btn btn-info" {% else %} class="btn btn-info disabled" {% endif %}>CheckOut</a>
     </p>
 {% endblock storecontent %}
