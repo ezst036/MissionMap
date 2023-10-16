@@ -30,82 +30,81 @@
     <body class="bg-light">
 
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample08" aria-controls="navbarsExample08" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample08" aria-controls="navbarsExample08" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <div class="collapse navbar-collapse justify-content-md-center" id="navbarsExample08">
-            <ul class="navbar-nav">
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'home' %}">Home</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'digitalconnect' %}">Connect</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'tithe' %}">Tithe</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'eventlist' %}">Events</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'productlist' %}">Store</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'missionmap' %}">Missions</a>
-            </li>
+            <div class="collapse navbar-collapse justify-content-md-center" id="navbarsExample08">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'digitalconnect' %}">Connect</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'tithe' %}">Tithe</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'eventlist' %}">Events</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'productlist' %}">Store</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'missionmap' %}">Missions</a>
+                    </li>
 
-            {% if preferences.open_registration %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register' %}">Register</a>
-                </li>
-            {% endif %}
-
-            {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="{% url 'login' %}">Login</a>
-                </li>
-            {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">Login</a>
-                </li>
-            {% endif %}
-
-            {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-                </li>
-            {% else %}
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="{% url 'logout' %}">Logout</a>
-                </li>
-            {% endif %}
-            
-            {% if user.is_authenticated %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="dropdown08" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span>Hello {{ user.username }}!</span></a>
-                    <div class="dropdown-menu" aria-labelledby="dropdown08">
-                    {% if user.is_superuser %}
-                        <a class="dropdown-item" href="/admin/">Administration</a>
-                    {% else %}
-                        {% if user.is_staff %}
-                            <a class="dropdown-item" href="/admin/">Administration</a>
-                            <a class="dropdown-item" href="{% url 'check' %}">Sunday Check In</a>
-                            <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
-                            <a class="dropdown-item" href="{% url 'fullscreenmap' %}">Map (full screen)</a>
-                        {% else %}
-                            <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
-                        {% endif %}
+                    {% if preferences.open_registration %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'register' %}">Register</a>
+                        </li>
                     {% endif %}
-                    <!--<a class="dropdown-item" href="#">Something here</a>
-                    <a class="dropdown-item" href="#">Something else here</a>-->
-                    </div>
-                </li>
-            {% endif %}
 
-            </ul>
-        </div>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="{% url 'login' %}">Login</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">Login</a>
+                        </li>
+                    {% endif %}
+
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="{% url 'logout' %}">Logout</a>
+                        </li>
+                    {% endif %}
+                    
+                    {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="dropdown08" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span>Hello {{ user.username }}!</span></a>
+                            <div class="dropdown-menu" aria-labelledby="dropdown08">
+                            {% if user.is_superuser %}
+                                <a class="dropdown-item" href="/admin/">Administration</a>
+                            {% else %}
+                                {% if user.is_staff %}
+                                    <a class="dropdown-item" href="/admin/">Administration</a>
+                                    <a class="dropdown-item" href="{% url 'check' %}">Sunday Check In</a>
+                                    <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
+                                    <a class="dropdown-item" href="{% url 'fullscreenmap' %}">Map (full screen)</a>
+                                {% else %}
+                                    <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
+                                {% endif %}
+                            {% endif %}
+                            <!--<a class="dropdown-item" href="#">Something here</a>
+                            <a class="dropdown-item" href="#">Something else here</a>-->
+                            </div>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
         </nav>
 
         <div>
