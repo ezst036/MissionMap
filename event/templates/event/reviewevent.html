@@ -7,7 +7,7 @@
 
 <body>
 	<div class="container">
-		<h3 class="text-center text-dark mb-3 pb-3">Review service and events</h3>
+		<h3 class="text-center text-dark mt-2 mb-3 pb-3">Review service and events</h3>
 		<div class="row">
 			<div class="col-md-7 col-md-push-7 border-right">
 				<h3 class="text-center text-dark mb-3 pb-3">Event:</h3>
@@ -18,21 +18,24 @@
 					<input type="hidden" name="item_name" value="{{event.name}}">
 					<input type="hidden" name="item_price" value="{{event.price}}">
 					
-					<div class="m-4 p-5">			
+					<div class="mt-3"></div>
+					<div class="p-3 bg-white">			
 						<label for="card-elements">
-							Credit or debit card
+							Enter credit or debit card:
 						</label>
-						<div id="card-element">
+						<div id="card-element" class="bg-white">
 							<!-- A Stripe Element will be inserted here. -->
 						</div>
 
 						<!-- Used to display form errors. -->
 						<div id="card-errors" role="alert"></div>
 					</div>
+					<div class="mb-3"></div>
+
 					<div class="form-group"><button class="btn btn-primary btn-block" type="submit">Complete Registration</button></div>
 				</form>
 			</div>
-			<div class="mt-2 col-md-4 col-md-push-4">
+			<div class="col-md-4 col-md-push-4">
 				<h3 class="text-center text-dark mb-3 pb-3">Personal:</h3>
 				<table>
 					<thead>
