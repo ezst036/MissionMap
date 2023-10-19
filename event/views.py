@@ -1,29 +1,11 @@
 from django.shortcuts import get_object_or_404, render
 import stripe
-from . models import Event, StripeKeys
+from . models import Event, StripeKeys, EventPurchaseLog
 from django.contrib import messages
 from . forms import EventForm, AccountVerificationForm
-
-from django.views.generic.base import TemplateView
-
-class EventHomeView(TemplateView):
-    
-    template_name = 'event/events.html'
-
-    def get_context_data(self, **kwargs):
-        try: #Always return the first available
-            apikeys = StripeKeys.objects.all().first()
-            if apikeys.stripepublic[:6] == "STRIPE" or apikeys.stripepublic[:6] == "STRIPE":
-                 messages.success(self, f'API keys not yet setup by the administrator.')
-        except Exception as e:
-            #Deleted keys
-            print(e)
-
-        stripe.api_key = apikeys.stripesecret
-
-        context = super().get_context_data(**kwargs)
-        context['key'] = apikeys.stripepublic
-        return context
+from django.utils.timezone import now
+import uuid
+import geocoder
 
 def reviewConfirm(request):
    #Always return the first available
@@ -38,7 +20,7 @@ def reviewConfirm(request):
    
    if request.method == 'GET':
         #Go to main page and prevent null data errors
-        event = Event.objects.filter(available=True)
+        event = Event.objects.filter(complete=False)
     
         return render(request, 'event/listcontainer.html', {'events':event})
 
@@ -106,22 +88,50 @@ def reviewConfirm(request):
 
 def chargeEvent(request):
     if request.method == 'POST':
+        eventuuid = uuid.uuid4()
+
         charge = stripe.Charge.create(
             amount = request.POST['item_price'],
             currency='usd',
             description=request.POST['item_name'],
             source=request.POST['stripeToken'],
         )
-        return render(request, 'event/charge.html')
+
+        #Cannot be null
+        userAccountid = 0
+
+        if request.user.id != None:
+            userAccountid = request.user.id
+
+        #Internal OpenCheckIn logging object
+        EventPurchaseLog.objects.create(
+            name = request.POST['item_name'],
+            userAccountid = userAccountid,
+            purchDate = now(),
+            confnum = eventuuid
+        )
+
+        return render(request, 'event/charge.html', {'eventconfirmation':eventuuid})
 
 def eventlist(request):
-    event = Event.objects.filter(available=True)
+    event = Event.objects.filter(complete=False)
     
     return render(request, 'event/listcontainer.html', {'events':event})
 
 def eventdetail(request, id, slug):
-    event=get_object_or_404(Event, id=id, slug=slug, available=True)
+    event = get_object_or_404(Event, id=id, slug=slug, complete=False)
+    
+    if request.method == 'POST':
+        location = geocoder.osm(request.POST['location'])
+        if location.lat == None or location.lng == None:
+            messages.success(request, f'Nothing was found using this search term.')
+        else:
+            event.latitude = location.lat
+            event.longitude = location.lng
+            event.save()
 
+    #Event price has to be modified after the event.save() otherwise it changes the value in the database.
     event.price = event.price / 100
-   
-    return render(request, 'event/detail.html', {'product':event})
+    return render(request, 'event/detail.html', {'product':event,
+                                                 'latitude': event.latitude,
+                                                 'longitude': event.longitude})

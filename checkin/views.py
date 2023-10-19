@@ -1,4 +1,3 @@
-import datetime
 from django.shortcuts import render, redirect
 from account.models import Account, Family, Youth, UIPrefs, YouthCheckInLog, CheckInQr
 from tithe.models import TitheLog
@@ -12,7 +11,7 @@ from django.db.models import Q
 from django.utils.timezone import now
 import cv2
 from pyzbar.pyzbar import decode
-from datetime import datetime
+from datetime import time
 import warnings
 from urllib.parse import unquote_plus
 import json
@@ -124,7 +123,7 @@ def profile(request):
             for tithe in tithelist:
                 tithe.giveAmount = tithe.giveAmount / 100
         
-        event = Event.objects.filter(available=True)
+        event = Event.objects.filter(complete=False)
 
     context = {
         'obj' : obj,

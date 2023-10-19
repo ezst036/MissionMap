@@ -6,8 +6,11 @@ class Event(models.Model):
     slug = models.SlugField(max_length=200, db_index=True, null=True)
     image = models.ImageField(upload_to='events/%Y/%m/%d', blank=True)
     description = models.TextField(blank=True)
+    dateofevent = models.DateField(auto_now=True)
     price = models.IntegerField(default=0)
-    available = models.BooleanField(default=True)
+    complete = models.BooleanField(default=False)
+    latitude = models.FloatField(default=0)
+    longitude = models.FloatField(default=0)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now=True)
     
