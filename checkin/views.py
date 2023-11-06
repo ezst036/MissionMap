@@ -16,6 +16,7 @@ import warnings
 from urllib.parse import unquote_plus
 import json
 from event.models import Event
+import geocoder
 
 def login(request):
     if request.method == 'POST':
@@ -132,6 +133,8 @@ def profile(request):
         'youts': youts,
         'tithelog': tithelist,
         'preferences': preferred.enable_qr,
+        'currlat': preferred.latitude,
+        'currlon': preferred.longitude,
         'events':event
     }
     return render(request, 'checkin/profile.html', context)
@@ -424,3 +427,29 @@ def camControl():
     cv2.destroyAllWindows()
 
     return whatgotscanned
+
+#Ajax
+class HomeLocation(View):
+    def post(self, request):
+        try:
+            preferred = UIPrefs.objects.all()[0]
+        except IndexError as e:
+            #return nothing if prefs do not exist.
+            print(e)
+            return JsonResponse({ 'updated': False })
+        
+        geoLocation = geocoder.osm(request.POST.get('location', None))
+        if geoLocation.lat == None or geoLocation.lng == None:
+            messages.success(request, f'Nothing was found using this search term.')
+            return JsonResponse({ 'updated': False })
+        else:
+            #check for same values, if so do not send to database.
+            if geoLocation.lat != preferred.latitude or geoLocation.lng != preferred.longitude:
+                preferred.latitude = geoLocation.lat
+                preferred.longitude = geoLocation.lng
+                preferred.save()
+
+        # lat = request.POST.get('latitude', None)
+        # lon = request.POST.get('longitude', None)
+
+        return JsonResponse({ 'newlat': geoLocation.lat, 'newlon': geoLocation.lng })

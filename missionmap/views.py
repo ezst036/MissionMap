@@ -1,6 +1,7 @@
 from django.shortcuts import render
 import folium
 from account.models import UIPrefs
+from event.models import Event
 from . models import Mission
 
 def index(request):
@@ -35,16 +36,32 @@ def index(request):
 
     if len(missions) > 0:
         for mission in missions:
-            coordinates = (mission.latitude, mission.longitude)
-            tooltip = "Hover message"
-            icon = folium.Icon(color='lightgray', icon='fa-bars', prefix='fa')
-            iframe = folium.IFrame('Mission name: ' + str(mission.location) + ' <a href=https://www.bible.com/>Bible.com</a>')
-            popup = folium.Popup(iframe, min_width=300, max_width=300)
+            mcoordinates = (mission.latitude, mission.longitude)
+            mtooltip = "Hover message"
+            micon = folium.Icon(color='lightgray', icon='fa-bars', prefix='fa')
+            miframe = folium.IFrame('Mission name: ' + str(mission.location) + ' <a href=https://www.bible.com/>Bible.com</a>')
+            mpopup = folium.Popup(miframe, min_width=300, max_width=300)
 
-            folium.Marker(coordinates,
-                        tooltip=tooltip,
-                        icon=icon,
-                        popup=popup).add_to(ourmap)
+            folium.Marker(mcoordinates,
+                        tooltip=mtooltip,
+                        icon=micon,
+                        popup=mpopup).add_to(ourmap)
+    
+    events = Event.objects.all()
+
+    #Make events optional?
+    if len(events) > 0:
+        for event in events:
+            ecoordinates = (event.latitude, event.longitude)
+            etooltip = "Hover message"
+            eicon = folium.Icon(color='blue', icon='fa-bars', prefix='fa')
+            eiframe = folium.IFrame('Event name: ' + str(event.name))
+            epopup = folium.Popup(eiframe, min_width=300, max_width=300)
+
+            folium.Marker(ecoordinates,
+                        tooltip=etooltip,
+                        icon=eicon,
+                        popup=epopup).add_to(ourmap)
 
     context = {'map': ourmap._repr_html_()}
     if request.path == '/fullscreenmap/':

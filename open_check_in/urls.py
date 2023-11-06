@@ -37,6 +37,7 @@ urlpatterns = [
     path('ajax/checkyouth/camCheck/', views_from_checkin.CamCheck.as_view(), name='ajax_call_camCheck'),
     path('ajax/checkyouth/createQR/', views_from_checkin.createQR.as_view(), name='ajax_call_createQR'),
     path('ajax/checkyouth/guardianPreCheck/', views_from_checkin.GuardianPreCheck.as_view(), name='ajax_call_guardianPreCheck'),
+    path('ajax/profile/homeLocation/', views_from_checkin.HomeLocation.as_view(), name='ajax_set_homeLocation'),
     path('missions/', mission_views.index, name='missionmap'),
     path('fullscreenmap/', mission_views.index, name='fullscreenmap'),
     path('paycharge/', checkoutview.paycharge, name='paycharge'),    

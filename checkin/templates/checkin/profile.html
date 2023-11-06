@@ -226,15 +226,33 @@
                     <p>To do
                 </div>
 
-                {% if user.is_pastor == True %}
-                    <div class="tab-pane" id="pastor">
-                        <p>Pastor</p>
+                <div class="tab-pane active" id="pastor">
+                    <div class="container mt-3 mb-5">
+                        <div class="row ml-5">
+                            <div class="col-md-7 col-md-push-7 border-right">
+                                <p>This first line of text is not permission protected so you can see it.
 
-                        <hr>
-                        Hello Pastor!
-                        <p>To do
+                                {% if user.is_pastor == True %}
+                                    <p><b>This second bold line of text is permission protected.</b>
+                                {% endif %}
+                                <p>This third line of text is not permission protected.
+                                
+                                {% include 'missionmap/snippets/homelocation.html' %}
+                            </div>
+                            <div class="mt-2 col-md-3 col-md-push-3">
+                                <h4>Search:</h4>
+                                <input class="form-control" id="form-location" type="text" name="formLocation" placeholder="Enter an address">
+                                <br />
+                                <label for="latitude">latitude</label>
+                                <input class="form-control" id="form-lat" type="text" name="formLatitude" value="{{currlat}}" disabled/>
+                                <label for="longitude">longitude</label>
+                                <input class="form-control" id="form-lon" type="text" name="formLongitude" value="{{currlon}}" disabled/>
+                                <br />
+                                <button class="btn btn-outline-info form-control" id="locationupd" onClick="homeLocation()">Update location</button>
+                            </div>
+                        </div>
                     </div>
-                {% endif %}
+                </div>
 
             </div>
         </div>    
@@ -426,6 +444,47 @@ $("form#updateYouth").submit(function() {
     closeDecorate();
     return false;
 });
+
+function homeLocation() {
+    let csrftoken = '{{ csrf_token }}'
+    let latitude = $('input[name="formLatitude"]').val().trim()
+    let longitude = $('input[name="formLongitude"]').val().trim()
+
+    $.ajax({
+        type: "POST",
+        headers:{'X-CSRFToken':csrftoken},
+        url: '{% url "ajax_set_homeLocation" %}',
+        data: {
+            'latitude': latitude,
+            'longitude': longitude,
+            'location': $('input[name="formLocation"]').val().trim(),
+        },
+        dataType: 'json',
+        success: function (response) {
+            map.eachLayer(function (layer) {
+                map.removeLayer(layer);
+            });
+
+            $('#form-lat').val(response.newlat);
+            $('#form-lon').val(response.newlon);
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                minZoom: 0,
+                maxZoom: 19,
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+
+            var marker = L.marker([response.newlat, response.newlon]).addTo(map);
+
+            map.panTo(new L.LatLng(response.newlat, response.newlon));
+
+            //Prevent panTo and setZoom from stepping on each other
+            setTimeout(function () {
+                map.setZoom(9);
+            }, 1000);
+        }
+    });
+}
 
 function editYouth(id, fn, mn, ln, img) {
     var btnName = document.getElementById('editTblBtn-' + id);

@@ -9,6 +9,7 @@ class Event(models.Model):
     dateofevent = models.DateField(auto_now=True)
     price = models.IntegerField(default=0)
     complete = models.BooleanField(default=False)
+    nocost = models.BooleanField(default=False)
     latitude = models.FloatField(default=0)
     longitude = models.FloatField(default=0)
     created = models.DateTimeField(auto_now_add=True, null=True)

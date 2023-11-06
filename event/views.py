@@ -4,7 +4,7 @@ from . models import Event, StripeKeys, EventPurchaseLog
 from django.contrib import messages
 from . forms import EventForm, AccountVerificationForm
 from django.utils.timezone import now
-import uuid
+import shortuuid
 import geocoder
 
 def reviewConfirm(request):
@@ -88,14 +88,14 @@ def reviewConfirm(request):
 
 def chargeEvent(request):
     if request.method == 'POST':
-        eventuuid = uuid.uuid4()
+        eventuuid = shortuuid.uuid()
 
-        charge = stripe.Charge.create(
-            amount = request.POST['item_price'],
-            currency='usd',
-            description=request.POST['item_name'],
-            source=request.POST['stripeToken'],
-        )
+        #charge = stripe.Charge.create(
+        #    amount = request.POST['item_price'],
+        #    currency='usd',
+        #    description=request.POST['item_name'],
+        #    source=request.POST['stripeToken'],
+        #)
 
         #Cannot be null
         userAccountid = 0
@@ -111,7 +111,9 @@ def chargeEvent(request):
             confnum = eventuuid
         )
 
-        return render(request, 'event/charge.html', {'eventconfirmation':eventuuid})
+        event = Event.objects.get(id=request.POST['item_id'])
+
+        return render(request, 'event/charge.html', {'eventconfirmation':eventuuid, 'event':event})
 
 def eventlist(request):
     event = Event.objects.filter(complete=False)
