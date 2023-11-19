@@ -4,6 +4,8 @@ from tithe.models import TitheLog
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from account.forms import RegistrationForm, ProfileUpdateForm, UploadForm
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.views import PasswordChangeView
 from django.contrib import messages
 from django.views.generic import View
 from django.http import JsonResponse, HttpResponse
@@ -17,6 +19,7 @@ from urllib.parse import unquote_plus
 import json
 from event.models import Event
 import geocoder
+from django.urls import reverse_lazy
 
 def login(request):
     if request.method == 'POST':
@@ -453,3 +456,10 @@ class HomeLocation(View):
         # lon = request.POST.get('longitude', None)
 
         return JsonResponse({ 'newlat': geoLocation.lat, 'newlon': geoLocation.lng })
+
+class PasswordChange(PasswordChangeView):
+    from_class = PasswordChangeForm
+    success_url = reverse_lazy('passwordchangecomplete')
+
+def passwordChangeComplete(request):
+    return render(request, 'checkin/passwordchangecomplete.html')

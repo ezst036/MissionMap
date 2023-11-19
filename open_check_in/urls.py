@@ -28,6 +28,8 @@ urlpatterns = [
     #path('login/', views_from_checkin.login, name="login"),
     path('logout/', auth_views.LogoutView.as_view(template_name="checkin/logout.html", next_page=None), name='logout'),
     path('smalllogin/', auth_views.LoginView.as_view(template_name='checkin/smalllogin.html'), name='smalllogin'),
+    path('passwordchange', views_from_checkin.PasswordChange.as_view(template_name='checkin/passwordchangeform.html'), name='passwordchange'),
+    path('passwordchangecomplete', views_from_checkin.passwordChangeComplete, name='passwordchangecomplete'),
     re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
     re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_URL}),
     path('ajax/profile/createYouth/', views_from_checkin.ProfileCreateYouth.as_view(), name='ajax_call_createyouth'),
