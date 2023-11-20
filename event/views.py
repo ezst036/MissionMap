@@ -88,30 +88,32 @@ def reviewConfirm(request):
 
 def chargeEvent(request):
     if request.method == 'POST':
-        eventuuid = shortuuid.uuid()
+        event = Event.objects.get(id=request.POST['item_id'])
 
-        #charge = stripe.Charge.create(
-        #    amount = request.POST['item_price'],
-        #    currency='usd',
-        #    description=request.POST['item_name'],
-        #    source=request.POST['stripeToken'],
-        #)
+        #Do not contact Stripe for no cost events
+        if event.nocost == False:
+            charge = stripe.Charge.create(
+                amount = request.POST['item_price'],
+                currency='usd',
+                description=request.POST['item_name'],
+                source=request.POST['stripeToken'],
+            )
 
-        #Cannot be null
+        #Acct. ID cannot be null
         userAccountid = 0
+        eventuuid = shortuuid.uuid()
 
         if request.user.id != None:
             userAccountid = request.user.id
 
         #Internal OpenCheckIn logging object
+        #No cost events also need to be logged
         EventPurchaseLog.objects.create(
             name = request.POST['item_name'],
             userAccountid = userAccountid,
             purchDate = now(),
             confnum = eventuuid
         )
-
-        event = Event.objects.get(id=request.POST['item_id'])
 
         return render(request, 'event/charge.html', {'eventconfirmation':eventuuid, 'event':event})
 

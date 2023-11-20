@@ -19,19 +19,9 @@
 					<input type="hidden" name="item_id" value="{{event.id}}">
 					<input type="hidden" name="item_price" value="{{event.price}}">
 					
-					<div class="mt-3"></div>
-					<div class="p-3 bg-white">			
-						<label for="card-elements">
-							Enter credit or debit card:
-						</label>
-						<div id="card-element" class="bg-white">
-							<!-- A Stripe Element will be inserted here. -->
-						</div>
-
-						<!-- Used to display form errors. -->
-						<div id="card-errors" role="alert"></div>
-					</div>
-					<div class="mb-3"></div>
+					{% if not event.nocost %}
+						{% include 'event/snippets/stripe_snippet.html' %}
+					{% endif %}
 
 					<div class="form-group"><button id="registration" class="btn btn-primary btn-block" type="submit">Complete Registration</button></div>
 				</form>
