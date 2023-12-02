@@ -12,3 +12,5 @@ numpy==1.24.1
 opencv-python==4.7.0.68
 twilio==7.9.2
 stripe==3.5.0
+geocoder==1.38.1
+shortuuid=1.0.11
