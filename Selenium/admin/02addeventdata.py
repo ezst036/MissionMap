@@ -68,7 +68,7 @@ eventupdname = driver.find_element(By.ID, "id_name")
 eventupdname.send_keys("First Event")
 
 eventupddesc = driver.find_element(By.ID, "id_description")
-eventupddesc.send_keys("First description")
+eventupddesc.send_keys("This is the description for the first event")
 
 eventupdprice = driver.find_element(By.ID, "id_price")
 eventupdprice.send_keys("901", Keys.DELETE)
@@ -95,7 +95,7 @@ eventupdname = driver.find_element(By.ID, "id_name")
 eventupdname.send_keys("Second Event")
 
 eventupddesc = driver.find_element(By.ID, "id_description")
-eventupddesc.send_keys("Second description")
+eventupddesc.send_keys("Description of the second event")
 
 eventupdprice = driver.find_element(By.ID, "id_price")
 eventupdprice.send_keys("908", Keys.DELETE)
@@ -110,7 +110,7 @@ time.sleep(3)
 
 savelink.click()
 
-##########Add the third event
+##########Add the third event as a free event
 addeventslink = driver.find_element(By.LINK_TEXT, "ADD EVENT")
 addeventshover = ActionChains(driver).move_to_element(addeventslink)
 addeventshover.perform()
@@ -119,10 +119,36 @@ time.sleep(2)
 addeventslink.click()
 
 eventupdname = driver.find_element(By.ID, "id_name")
-eventupdname.send_keys("Third Event")
+eventupdname.send_keys("Third Event Free")
 
 eventupddesc = driver.find_element(By.ID, "id_description")
-eventupddesc.send_keys("Third description")
+eventupddesc.send_keys("Description of the third, a free event")
+
+eventupdnocost = driver.find_element(By.ID, "id_nocost").click()
+
+time.sleep(2)
+
+savelink = driver.find_element(By.NAME, "_save")
+savehover = ActionChains(driver).move_to_element(savelink)
+savehover.perform()
+
+time.sleep(3)
+
+savelink.click()
+
+##########Add the fourth event
+addeventslink = driver.find_element(By.LINK_TEXT, "ADD EVENT")
+addeventshover = ActionChains(driver).move_to_element(addeventslink)
+addeventshover.perform()
+time.sleep(2)
+
+addeventslink.click()
+
+eventupdname = driver.find_element(By.ID, "id_name")
+eventupdname.send_keys("Fourth Event")
+
+eventupddesc = driver.find_element(By.ID, "id_description")
+eventupddesc.send_keys("Fourth description")
 
 eventupdprice = driver.find_element(By.ID, "id_price")
 eventupdprice.send_keys("1234", Keys.DELETE)
@@ -137,12 +163,14 @@ time.sleep(2)
 
 savelink.click()
 
+time.sleep(7)
+
 logoutlink = driver.find_element(By.LINK_TEXT, "LOG OUT")
 logouthover = ActionChains(driver).move_to_element(logoutlink)
 logouthover.perform()
 logoutlink.click()
 
-time.sleep(2)
+time.sleep(4)
 
 menulink = driver.find_element(By.LINK_TEXT, "Events")
 login.move_to_element(menulink).perform()
