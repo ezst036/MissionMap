@@ -57,6 +57,18 @@ profileupd = driver.find_element(By.NAME, 'last_name')
 profileupd.clear()
 profileupd.send_keys("one")
 
+profileupd = driver.find_element(By.NAME, 'address')
+profileupd.clear()
+profileupd.send_keys("First street")
+
+profileupd = driver.find_element(By.NAME, 'city')
+profileupd.clear()
+profileupd.send_keys("Hometown")
+
+profileupd = driver.find_element(By.NAME, 'state')
+profileupd.clear()
+profileupd.send_keys("NC")
+
 profileupd = driver.find_element(By.NAME, 'phone_number_0')
 profileupd.clear()
 profileupd.send_keys("one", Keys.TAB)

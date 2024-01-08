@@ -20,7 +20,7 @@ time.sleep(1)
 
 link = driver.find_element(By.LINK_TEXT, "Register")
 link.click()
-time.sleep(1)
+time.sleep(3)
 
 # Create a new user account
 
@@ -38,7 +38,7 @@ time.sleep(1)
 
 link = driver.find_element(By.LINK_TEXT, "Register")
 link.click()
-time.sleep(1)
+time.sleep(3)
 
 # Create a new account which will be used with
 # a different set of permissions in other tests
@@ -51,7 +51,7 @@ create.send_keys("Aut0Pa$$!", Keys.TAB)
 create.send_keys(Keys.ENTER)
 create.perform()
 
-time.sleep(15)
+time.sleep(10)
 
 # Note: For production systems, all autoUser or autoStaff
 # or any other profiles with usernames and passwords typed

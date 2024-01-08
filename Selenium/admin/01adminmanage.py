@@ -29,13 +29,13 @@ time.sleep(5)
 
 login = ActionChains(driver)
 login.send_keys("fakeadmin01@fakeadmin01.com", Keys.TAB)
-login.send_keys("faker", Keys.TAB)
+login.send_keys("fakeadmin", Keys.TAB)
 login.send_keys(Keys.ENTER)
 login.perform()
 
 time.sleep(5)
 
-hellolink = driver.find_element(By.LINK_TEXT, "Hello fakeadmin01!")
+hellolink = driver.find_element(By.LINK_TEXT, "Hello fakeadmin!")
 hellohover = ActionChains(driver).move_to_element(hellolink)
 hellohover.perform()
 time.sleep(3)
