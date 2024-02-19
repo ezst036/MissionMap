@@ -13,6 +13,7 @@ chromedriver_autoinstaller.install()
 driver = webdriver.Chrome(service=Service())
 
 url = "http://ezst036.pythonanywhere.com/"
+driver.maximize_window()
 driver.get(url)
 
 # Pause on screen for two seconds

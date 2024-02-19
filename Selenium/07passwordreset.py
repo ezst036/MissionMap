@@ -56,7 +56,7 @@ time.sleep(5)
 
 login = ActionChains(driver)
 login.send_keys("fakeadmin01@fakeadmin01.com", Keys.TAB)
-login.send_keys("changeme123", Keys.TAB)
+login.send_keys("removed", Keys.TAB)
 login.send_keys(Keys.ENTER)
 login.perform()
 

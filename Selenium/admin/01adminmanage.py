@@ -10,6 +10,7 @@ chromedriver_autoinstaller.install()
 driver = webdriver.Chrome(service=Service())
 
 url = "http://ezst036.pythonanywhere.com/"
+driver.maximize_window()
 driver.get(url)
 
 time.sleep(3)
@@ -29,7 +30,7 @@ time.sleep(5)
 
 login = ActionChains(driver)
 login.send_keys("fakeadmin01@fakeadmin01.com", Keys.TAB)
-login.send_keys("fakeadmin", Keys.TAB)
+login.send_keys("removed", Keys.TAB)
 login.send_keys(Keys.ENTER)
 login.perform()
 
@@ -88,6 +89,12 @@ addpermissionhover.perform()
 time.sleep(2)
 
 addpermissionlink.click()
+
+time.sleep(2)
+
+# Enable the "is staff" checkbox
+setasstaff = driver.find_element(By.ID, "id_is_staff")
+setasstaff.click()
 
 time.sleep(5)
 
@@ -170,13 +177,13 @@ time.sleep(5)
 
 login = ActionChains(driver)
 login.send_keys("fakeadmin01@fakeadmin01.com", Keys.TAB)
-login.send_keys("faker", Keys.TAB)
+login.send_keys("removed", Keys.TAB)
 login.send_keys(Keys.ENTER)
 login.perform()
 
 time.sleep(5)
 
-hellolink = driver.find_element(By.LINK_TEXT, "Hello fakeadmin01!")
+hellolink = driver.find_element(By.LINK_TEXT, "Hello fakeadmin!")
 hellohover = ActionChains(driver).move_to_element(hellolink)
 hellohover.perform()
 time.sleep(3)
