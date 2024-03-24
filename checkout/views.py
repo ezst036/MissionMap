@@ -36,7 +36,7 @@ def cartdetails(request):
     try: #Checkout button disabled if stripe keys null or default values
         stripe.api_key = apikeys.stripesecret
         
-        if not (apikeys.stripesecret == 'STRIPE_PUBLIC_KEY' or
+        if (apikeys.stripesecret == 'STRIPE_PUBLIC_KEY' or
             apikeys.stripepublic == 'STRIPE_SECRET_KEY'):
             enablecontinue = False
             #Preference exists but not setup
@@ -44,11 +44,17 @@ def cartdetails(request):
     except Exception as e:
         messages.success(request, f'API keys not yet setup by the administrator. Transaction disabled.')
         enablecontinue = False
-        
+    
+    totalprice=0
     cart=ShoppingCart(request)
     for item in cart:
         item['update_quantity_form'] = CartForm(initial={'quantity':item['quantity'], 'override':True})
+        totalprice+=item['price']
     
+    if totalprice <= 0:
+        messages.success(request, f'Total price of all items equals zero. Transaction disabled.')
+        enablecontinue = False
+
     return render(request, 'checkout/shoppingcart.html', {'cart':cart, 'enablecontinue':enablecontinue})
 
 def productlist(request, categoryslug=None):
@@ -131,12 +137,16 @@ class SuccessView(TemplateView):
         cart=ShoppingCart(self.request)
         purchaseuuid = uuid.uuid4()
 
-        userAccountid = self.request.user.id
+        userAccountid = 0
+        try: #If no user logged in
+            userAccountid = self.request.user.id
+        except Exception as e:
+            userAccountid = 0 #re-set
 
         qtycounter = 0
         totalamount = 0
 
-        for item in cart: #Purchase complete.  The cart should be emptied.
+        for item in cart: #Purchase complete.  The cart should be emptied at the end.
             iterable = item.get('product')
 
             #Add an entry to the item log
@@ -144,7 +154,7 @@ class SuccessView(TemplateView):
                 prodname = iterable['name'],
                 prodid = iterable['id'],
                 prodqty = item['quantity'],
-                userAccountid = 0,
+                userAccountid = userAccountid,
                 purchDate = now(),
                 confnum = purchaseuuid
             )

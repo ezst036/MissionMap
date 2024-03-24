@@ -79,7 +79,7 @@
                     </div>
                 </div>
 
-                <div class="tab-pane" id="parent">
+                <div class="tab-pane pt-3" id="parent">
                     <!-- Parent tab -->
                     <div class="col-md-6 col-md-pull-6">
                         <div class="col-md-10">
@@ -212,18 +212,68 @@
                     </div>
                 </div>
 
-                <div class="tab-pane" id="events">
-                    <p>Event history</p>
-
-                    <p>To do
-
+                <div class="tab-pane pt-3" id="events">
+                    <h3>Current Events</h3>
                     {% include 'event/snippets/event_snippet.html' %}
+
+                    <hr>
+                    <h3>Event history</h3>
+                    <div class="border-top pt-3">
+                        <table id="eventTable" class="table table-striped table-hover">
+                            <tbody>
+                                <tr>
+                                    <th>Event name</th>
+                                    <th>Date</th>
+                                    <th>Confirmation number</th>
+                                </tr>
+                                {% for event in eventlog %}
+                                    <tr>
+                                        <td name="none">
+                                            {{ event.name }}
+                                        </td>
+                                        <td name="none">
+                                            {{ event.purchDate }}
+                                        </td>
+                                        <td name="none">
+                                            {{ event.confnum }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
-                <div class="tab-pane" id="purchase">
-                    <p>Purchase history</p>
-
-                    <p>To do
+                <div class="tab-pane pt-3" id="purchase">
+                    <h3>Purchase history</h3>
+                    <div class="border-top pt-3">
+                        <table id="purchaseTable" class="table table-striped table-hover">
+                            <tbody>
+                                <tr>
+                                    <th>Item name</th>
+                                    <th>Quantity</th>
+                                    <th>Date</th>
+                                    <th>Confirmation number</th>
+                                </tr>
+                                {% for purch in itempurchaselog %}
+                                    <tr>
+                                        <td name="none">
+                                            {{ purch.prodname }}
+                                        </td>
+                                        <td name="none">
+                                            {{ purch.prodqty }}
+                                        </td>
+                                        <td name="none">
+                                            {{ purch.purchDate }}
+                                        </td>
+                                        <td name="none">
+                                            {{ purch.confnum }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <div class="tab-pane active" id="pastor">

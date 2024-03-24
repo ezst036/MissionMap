@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from account.models import Account, Family, Youth, UIPrefs, YouthCheckInLog, CheckInQr
+from checkout.models import ItemPurchaseLog
 from tithe.models import TitheLog
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
@@ -17,7 +18,7 @@ from datetime import time
 import warnings
 from urllib.parse import unquote_plus
 import json
-from event.models import Event
+from event.models import Event, EventPurchaseLog
 import geocoder
 from django.urls import reverse_lazy
 
@@ -115,7 +116,6 @@ def profile(request):
             }
         
         tithelist = None
-
         try:
             tithelist = TitheLog.objects.filter(userAccountid=request.user.id)
 
@@ -126,7 +126,19 @@ def profile(request):
         if len(tithelist) > 1:
             for tithe in tithelist:
                 tithe.giveAmount = tithe.giveAmount / 100
+
+        eventRegistrationList = None
+        try:
+            eventRegistrationList = EventPurchaseLog.objects.filter(userAccountid=request.user.id)
+        except Exception as e:
+            print(e)
         
+        itemPurchaseList = None
+        try:
+            itemPurchaseList = ItemPurchaseLog.objects.filter(userAccountid=request.user.id)
+        except Exception as e:
+            print(e) 
+
         event = Event.objects.filter(complete=False)
 
     context = {
@@ -138,7 +150,9 @@ def profile(request):
         'preferences': preferred.enable_qr,
         'currlat': preferred.latitude,
         'currlon': preferred.longitude,
-        'events':event
+        'events':event,
+        'eventlog':eventRegistrationList,
+        'itempurchaselog':itemPurchaseList
     }
     return render(request, 'checkin/profile.html', context)
 
