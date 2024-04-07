@@ -211,7 +211,8 @@ class ProfileUpdateYouth(View):
             boolimgupl = False
             print(e)
         
-        if boolimgupl == False:
+        #Check if the file uploaded is the mock blob file
+        if youthimg.content_type == 'plain/text' and youthimg.name == 'blob' or boolimgupl == False:
             obj.youth_first_name = youthfn
             obj.youth_middle_name = youthmn
             obj.youth_last_name = youthln

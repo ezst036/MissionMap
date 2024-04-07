@@ -459,19 +459,29 @@ $("form#updateYouth").submit(function() {
     var fnInput = $('input[name="formYFN"]').val().trim();
     var mnInput = $('input[name="formYMN"]').val().trim();
     var lnInput = $('input[name="formYLN"]').val().trim();
-    const input = document.getElementById('form-youthimg')
-    const img_data = input.files[0]
-    const fd = new FormData()
-    fd.append('csrfmiddlewaretoken', csrf[0].value)
-    fd.append('image', img_data)
-    fd.append('id', idInput)
-    fd.append('youth_first_name', fnInput)
-    fd.append('youth_middle_name', mnInput)
-    fd.append('youth_last_name', lnInput)
+    const input = document.getElementById('form-youthimg');
+    const img_data = input.files[0];
+    const ociblob = new Blob(['Open Check In'], { type: 'plain/text' });
+    const fd = new FormData();
+    fd.append('csrfmiddlewaretoken', csrf[0].value);
+    var imgsize = ociblob.size;
+
+    //Allow edits to youth without requiring a new image upload
+    if (img_data === undefined) {
+        fd.append('image', ociblob);
+    }
+    else {
+        fd.append('image', img_data);
+        var imgsize = img_data.size;
+    }
+    fd.append('id', idInput);
+    fd.append('youth_first_name', fnInput);
+    fd.append('youth_middle_name', mnInput);
+    fd.append('youth_last_name', lnInput);
     var btnName = document.getElementById('editTblBtn-' + idInput);
     btnName.disabled = true;
-    var imgsize = img_data.size;
     var imgsizelimit = 1024 * 1024 * 10;
+
     if (imgsize < imgsizelimit) {
         $.ajax({
             url: '{% url "ajax_call_updateYouth" %}',
@@ -486,10 +496,10 @@ $("form#updateYouth").submit(function() {
                 }
             }
         });
-       } else {
+    }
+    else {
         alert("Selected image cannot be larger than 10Mb.");
     }
-    //$('form#updateYouth').trigger("reset");
     $('#youthModal').modal('hide');
     closeDecorate();
     return false;
