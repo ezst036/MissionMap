@@ -173,7 +173,7 @@
                                     <div class="border-bottom mb-4"></div>
 
                                     <div class="qrcodediv pb-3" id="qrimg">
-                                        {% if preferences == True %}
+                                        {% if preferences.enable_qr == True %}
                                             {% if not obj.completed %}
                                                 <h3 class="text-muted">Checkout code</h3>
                                                 <img src={{obj.qr_code.url}}></div>

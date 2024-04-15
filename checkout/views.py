@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404, render, redirect
+from account.models import UIPrefs
 from checkout.forms import CartForm
 from . cart import ShoppingCart
 from . models import Category, Product, StripeKeys, PurchaseLog, ItemPurchaseLog
@@ -45,6 +46,11 @@ def cartdetails(request):
         messages.success(request, f'API keys not yet setup by the administrator. Transaction disabled.')
         enablecontinue = False
     
+    try:
+        preferences = UIPrefs.objects.all().first()
+    except Exception as e:
+        print(e)
+
     totalprice=0
     cart=ShoppingCart(request)
     for item in cart:
@@ -54,10 +60,21 @@ def cartdetails(request):
     if totalprice <= 0:
         messages.success(request, f'Total price of all items equals zero. Transaction disabled.')
         enablecontinue = False
+    
+    context = {
+        'preferences': preferences,
+        'cart':cart,
+        'enablecontinue':enablecontinue
+    }
 
-    return render(request, 'checkout/shoppingcart.html', {'cart':cart, 'enablecontinue':enablecontinue})
+    return render(request, 'checkout/shoppingcart.html', context)
 
 def productlist(request, categoryslug=None):
+    try:
+        preferences = UIPrefs.objects.all().first()
+    except Exception as e:
+        print(e)
+
     category = None
     categories = Category.objects.all()
     products = Product.objects.filter(available=True)
@@ -65,14 +82,32 @@ def productlist(request, categoryslug=None):
         category = get_object_or_404(Category, slug=categoryslug)
         products = products.filter(category=category)
     
-    return render(request, 'checkout/list.html', {'category':category, 'categories':categories, 'products':products})
+    context = {
+        'preferences': preferences,
+        'category':category,
+        'categories':categories,
+        'products':products
+    }
+
+    return render(request, 'checkout/list.html', context)
 
 def productdetail(request, id, slug):
+    try:
+        preferences = UIPrefs.objects.all().first()
+    except Exception as e:
+        print(e)
+
     product=get_object_or_404(Product, id=id, slug=slug, available=True)
     cart_product_form = CartForm()
     product.price=product.price / 100
 
-    return render(request, 'checkout/detail.html', {'product':product, 'cart_product_form':cart_product_form})
+    context = {
+        'preferences': preferences,
+        'product':product,
+        'cart_product_form':cart_product_form
+    }
+
+    return render(request, 'checkout/detail.html', context)
 
 class MainView(TemplateView):
     template_name = "checkout/revieworder.html"

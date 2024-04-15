@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 import stripe
+from account.models import UIPrefs
 from . models import Event, StripeKeys, EventPurchaseLog
 from django.contrib import messages
 from . forms import EventForm, AccountVerificationForm
@@ -28,6 +29,11 @@ def reviewConfirm(request):
         #get item information
         event = Event.objects.get(id=request.POST['item_id'])
 
+        try:
+            preferences = UIPrefs.objects.all().first()
+        except IndexError as e:
+            print(e)
+
         if request.user.is_authenticated:
             #Display user's information
             userform = AccountVerificationForm(initial={
@@ -55,11 +61,16 @@ def reviewConfirm(request):
         payform.fields['name'].disabled = True
         payform.fields['description'].disabled = True
         payform.fields['price'].disabled = True
+
+        context = {
+            'preferences': preferences,
+            'payform': payform,
+            "STRIPE_PUBLIC_KEY": apikeys.stripepublic,
+            'userform': userform,
+            'event':event
+        }
         
-        return render(request, 'event/reviewevent.html', {'payform': payform,
-                                                           "STRIPE_PUBLIC_KEY": apikeys.stripepublic,
-                                                           'userform': userform,
-                                                           'event':event})
+        return render(request, 'event/reviewevent.html', context)
 
 
         # amount = int(request.POST["amount"]) 
@@ -118,11 +129,24 @@ def chargeEvent(request):
         return render(request, 'event/charge.html', {'eventconfirmation':eventuuid, 'event':event})
 
 def eventlist(request):
-    event = Event.objects.filter(complete=False)
+    try:
+        preferences = UIPrefs.objects.all().first()
+    except Exception as e:
+        print(e)
+
+    context = {
+        'preferences': preferences,
+        'events': Event.objects.filter(complete=False)
+    }
     
-    return render(request, 'event/listcontainer.html', {'events':event})
+    return render(request, 'event/listcontainer.html', context)
 
 def eventdetail(request, id, slug):
+    try:
+        preferences = UIPrefs.objects.all().first()
+    except Exception as e:
+        print(e)
+    
     event = get_object_or_404(Event, id=id, slug=slug, complete=False)
     
     if request.method == 'POST':
@@ -134,8 +158,13 @@ def eventdetail(request, id, slug):
             event.longitude = location.lng
             event.save()
 
+    context = {
+        'preferences': preferences,
+        'product':event,
+        'latitude': event.latitude,
+        'longitude': event.longitude
+    }
+
     #Event price has to be modified after the event.save() otherwise it changes the value in the database.
     event.price = event.price / 100
-    return render(request, 'event/detail.html', {'product':event,
-                                                 'latitude': event.latitude,
-                                                 'longitude': event.longitude})
+    return render(request, 'event/detail.html', context)

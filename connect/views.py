@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from account.models import UIPrefs
 from .models import TwilioPrefs
 from .forms import ConnectForm
 from django.contrib import messages
@@ -64,4 +65,14 @@ def connectview(request):
     if not request.user.is_authenticated:
         form = ConnectForm()
     
-    return render(request, 'form.html', {'form': form})
+    try:
+        preferences = UIPrefs.objects.all().first()
+    except Exception as e:
+        print(e)
+
+    context = {
+        'preferences': preferences,
+        'form': form
+    }
+    
+    return render(request, 'form.html', context)

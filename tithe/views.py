@@ -3,6 +3,7 @@ from django.shortcuts import render
 import re
 from django.utils.timezone import now
 import stripe
+from account.models import UIPrefs
 from . models import TitheLog, StripeKeys
 
 def index(request):
@@ -16,7 +17,17 @@ def index(request):
         messages.success(request, f'API keys not yet setup by the administrator.')
         return render(request, 'tithe/index.html')
     
-    return render(request, 'tithe/index.html', {'publickey':stripe.api_key})
+    try:
+        preferences = UIPrefs.objects.all().first()
+    except Exception as e:
+        print(e)
+
+    context = {
+        'preferences': preferences,
+        'publickey':stripe.api_key
+    }
+    
+    return render(request, 'tithe/index.html', context)
 
 def charge(request):
     #Always return the first available

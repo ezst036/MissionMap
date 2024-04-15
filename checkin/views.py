@@ -95,9 +95,9 @@ def profile(request):
         fams = Family.objects.all()
         youts = Youth.objects.all()
         try:
-            preferred = UIPrefs.objects.all()[0]
+            preferences = UIPrefs.objects.all()[0]
         except IndexError:
-            preferred = {
+            preferences = {
                 'enable_qr': True
             }   
 
@@ -147,9 +147,7 @@ def profile(request):
         'fams': fams,
         'youts': youts,
         'tithelog': tithelist,
-        'preferences': preferred.enable_qr,
-        'currlat': preferred.latitude,
-        'currlon': preferred.longitude,
+        'preferences': preferences,
         'events':event,
         'eventlog':eventRegistrationList,
         'itempurchaselog':itemPurchaseList
