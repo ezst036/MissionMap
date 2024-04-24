@@ -15,7 +15,6 @@ def index(request):
     except Exception as e:
         #Deleted keys
         messages.success(request, f'API keys not yet setup by the administrator.')
-        return render(request, 'tithe/index.html')
     
     try:
         preferences = UIPrefs.objects.all().first()
