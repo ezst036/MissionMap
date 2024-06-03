@@ -12,7 +12,7 @@ from django.views.generic import View
 from django.http import JsonResponse, HttpResponse
 from django.db.models import Q
 from django.utils.timezone import now
-import cv2
+#import cv2
 from pyzbar.pyzbar import decode
 from datetime import time
 import warnings
@@ -412,35 +412,35 @@ def camControl():
     warnings.filterwarnings("error")
 
     #TODO: Handle errors better if the camera is simply unplugged
-    cap = cv2.VideoCapture(0)
+    #cap = cv2.VideoCapture(0)
     whatgotscanned = ''
 
-    cap.set(3, 640)
-    cap.set(4, 480)
-    camera = True
-    while camera == True:
-        success, frame = cap.read()
+    # cap.set(3, 640)
+    # cap.set(4, 480)
+    # camera = True
+    # while camera == True:
+    #     success, frame = cap.read()
 
-        print(frame)
+    #     print(frame)
 
-        scans = decode(frame)
+    #     scans = decode(frame)
 
-        if len(scans) == 1:
-            whatgotscanned = scans[0]
-            time.sleep(1)
-            camera = False
+    #     if len(scans) == 1:
+    #         whatgotscanned = scans[0]
+    #         time.sleep(1)
+    #         camera = False
 
-        #for code in decode(frame):
-            #print(code.type)
-            #print(code.data.decode('utf-8'))
-            #time.sleep(3)
+    #     #for code in decode(frame):
+    #         #print(code.type)
+    #         #print(code.data.decode('utf-8'))
+    #         #time.sleep(3)
         
-        cv2.imshow('open_check_in-qr-scan', frame)
-        if cv2.waitKey(1) == ord('q'):
-            break
+    #     cv2.imshow('open_check_in-qr-scan', frame)
+    #     if cv2.waitKey(1) == ord('q'):
+    #         break
 
-    cap.release()
-    cv2.destroyAllWindows()
+    # cap.release()
+    # cv2.destroyAllWindows()
 
     return whatgotscanned
 
