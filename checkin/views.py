@@ -342,13 +342,15 @@ class StaffCheckInYouth(View):
 #Ajax
 class CamCheck(View):
     def get(self, request):
-        scanresult = camControl()
-        scanresulttype = scanresult[1]
-        scanresultdecode = str(scanresult[0])
-        resultsubstring = scanresultdecode[2:-1]
+        ajaxDelivery = json.loads(request.GET['json_data'])
+        #scanresult = camControl()
+        #scanresulttype = scanresult[1]
+        #scanresultdecode = str(scanresult[0])
+        #resultsubstring = scanresultdecode[2:-1]
         
         #Only pull single object where completed = 0
-        qrobj = CheckInQr.objects.get(code=resultsubstring, completed=0)
+        #qrobj = CheckInQr.objects.get(code=resultsubstring, completed=0)
+        qrobj = CheckInQr.objects.get(code=ajaxDelivery['scannedData'], completed=0)
 
         qrcodearray = qrobj.code.split('-')
 
