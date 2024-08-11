@@ -16,7 +16,8 @@ event/migrations/*
 missionmap/migrations/*
 tithe/migrations/*
 
-#Ignore event and checkout photos, qrcodes
-media/events/*
+#Ignore event photos, checkout photos, profile_pics, and qrcodes
 media/checkout/*
+media/events/*
+media/profile_pics/*
 media/qrcodes/*
