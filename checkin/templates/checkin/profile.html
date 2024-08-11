@@ -175,7 +175,7 @@
                                     <div class="qrcodediv pb-3" id="qrimg">
                                         {% if preferences.enable_qr == True %}
                                             {% if not obj.completed %}
-                                                <h3 class="text-muted">Checkout code</h3>
+                                                <h3 class="text-muted">After service checkout code</h3>
                                                 <img src={{obj.qr_code.url}}></div>
                                             {% else %} <!-- Do not show the button if the QR code is showing -->
                                                 <p><button class="btn btn-success form-control" onClick="createQR()">Create QR</button>
