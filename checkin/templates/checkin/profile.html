@@ -178,7 +178,7 @@
                                                 <h3 class="text-muted">After service checkout code</h3>
                                                 <img src={{obj.qr_code.url}}></div>
                                             {% else %} <!-- Do not show the button if the QR code is showing -->
-                                                <p><button class="btn btn-success form-control" onClick="createQR()">Create QR</button>
+                                                <p><button class="btn btn-success form-control" id="createqr" onClick="createQR()">Create QR</button>
                                             {% endif %}
                                         {% endif %}
                                     </div>
