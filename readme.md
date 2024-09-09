@@ -47,7 +47,7 @@ If Open Check In is broadcast locally, there are never any fees and only people 
 
 Python Anywhere seems to be reasonably priced compared to most others, however Open Check In would function just as properly on any other provider such as Amazon AWS or Heroku.
 
-[**How to broadcast over wifi locally**](https://www.youtube.com/watch?v=ROiHfk1OfSI)
+[**How to setup Porteus Kiosk to point to Open Check In**](https://www.youtube.com/watch?v=ROiHfk1OfSI)
 
 For this last how to video, I showed Open Check In configured for boot on the free and open source Porteus Kiosk.
 
