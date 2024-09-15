@@ -39,6 +39,8 @@ Adding products such as coffee and snacks is a similar process.
 
 [**How to help a user do a password reset**](https://www.youtube.com/watch?v=Vde1Pypd5Kc)
 
+[**How to check-out after service with a QR code**](https://www.youtube.com/watch?v=aMPeqfaz8ME)
+
 [**How to broadcast over wifi locally**](https://www.youtube.com/watch?v=He1H5t6DZao)
 
 Setting up Open Check In to be managed entirely locally is not a difficult process to set up. Once this is done though, make sure to make back ups of your database file from time to time.
@@ -51,4 +53,4 @@ Python Anywhere seems to be reasonably priced compared to most others, however O
 
 For this last how to video, I showed Open Check In configured for boot on the free and open source Porteus Kiosk.
 
-I have a lot of instructions for each category of information based on what it is that you would like to do, please click on the corresponding video for more information and a brief view of how to proceed.
+I have a lot of instructions for each category of information based on what it is that you would like to do, please click on the corresponding video for more information and a brief view of how to proceed in that category.
