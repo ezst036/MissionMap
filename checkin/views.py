@@ -19,7 +19,8 @@ import warnings
 from urllib.parse import unquote_plus
 import json
 from event.models import Event, EventPurchaseLog
-import geocoder
+from geopy.geocoders import Nominatim
+
 from django.urls import reverse_lazy
 
 def login(request):
@@ -148,9 +149,11 @@ def profile(request):
         'youts': youts,
         'tithelog': tithelist,
         'preferences': preferences,
-        'events':event,
-        'eventlog':eventRegistrationList,
-        'itempurchaselog':itemPurchaseList
+        'currlat': preferences.latitude,
+        'currlon': preferences.longitude,
+        'events': event,
+        'eventlog': eventRegistrationList,
+        'itempurchaselog': itemPurchaseList
     }
     return render(request, 'checkin/profile.html', context)
 
@@ -458,21 +461,23 @@ class HomeLocation(View):
             print(e)
             return JsonResponse({ 'updated': False })
         
-        geoLocation = geocoder.osm(request.POST.get('location', None))
-        if geoLocation.lat == None or geoLocation.lng == None:
+        geolocator = Nominatim(user_agent="githubdotcomslashezst036, ezst036@gmx.com")
+        location = geolocator.geocode(request.POST.get('location', None))
+
+        if location.latitude == None or location.longitude == None:
             messages.success(request, f'Nothing was found using this search term.')
             return JsonResponse({ 'updated': False })
         else:
             #check for same values, if so do not send to database.
-            if geoLocation.lat != preferred.latitude or geoLocation.lng != preferred.longitude:
-                preferred.latitude = geoLocation.lat
-                preferred.longitude = geoLocation.lng
+            if location.latitude != preferred.latitude or location.longitude != preferred.longitude:
+                preferred.latitude = location.latitude
+                preferred.longitude = location.longitude
                 preferred.save()
 
         # lat = request.POST.get('latitude', None)
         # lon = request.POST.get('longitude', None)
 
-        return JsonResponse({ 'newlat': geoLocation.lat, 'newlon': geoLocation.lng })
+        return JsonResponse({ 'newlat': location.latitude, 'newlon': location.longitude })
 
 class PasswordChange(PasswordChangeView):
     from_class = PasswordChangeForm

@@ -6,7 +6,7 @@ from django.contrib import messages
 from . forms import EventForm, AccountVerificationForm
 from django.utils.timezone import now
 import shortuuid
-import geocoder
+from geopy.geocoders import Nominatim
 
 def reviewConfirm(request):
    #Always return the first available
@@ -142,21 +142,28 @@ def eventlist(request):
     return render(request, 'event/listcontainer.html', context)
 
 def eventdetail(request, id, slug):
+    userAgentVal = ''
+
     try:
         preferences = UIPrefs.objects.all().first()
+        userAgentVal = preferences.mapidentification
     except Exception as e:
         print(e)
     
     event = get_object_or_404(Event, id=id, slug=slug, complete=False)
     
     if request.method == 'POST':
-        location = geocoder.osm(request.POST['location'])
-        if location.lat == None or location.lng == None:
-            messages.success(request, f'Nothing was found using this search term.')
+        if userAgentVal == '':
+            messages.success(request, f'Map identification field incorrect, please enter your church name followed by an email address.')
         else:
-            event.latitude = location.lat
-            event.longitude = location.lng
-            event.save()
+            geolocator = Nominatim(user_agent=userAgentVal)
+            location = geolocator.geocode(request.POST.get('location', None))
+            if location.latitude == None or location.longitude == None:
+                messages.success(request, f'Nothing was found using this search term.')
+            else:
+                event.latitude = location.latitude
+                event.longitude = location.longitude
+                event.save()
 
     context = {
         'preferences': preferences,

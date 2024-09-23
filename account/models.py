@@ -129,6 +129,7 @@ class UIPrefs(models.Model):
     map = models.BooleanField(verbose_name="Enable map", default=True)
     latitude = models.CharField(verbose_name="Latitude", max_length=20, default="0")
     longitude = models.CharField(verbose_name="Longitude", max_length=20, default="-0")
+    mapidentification = models.CharField(verbose_name="Map identification", max_length=255, null=True, default="SetChurchNameHere, newOpenCheckIn@Install")
     
     class Meta:
         verbose_name = "UI Preference"
