@@ -36,19 +36,27 @@
         </div>
 
         <div class="container border-top mt-2 pt-2">
-            <div class="row ml-5">
-                <div class="col-md-auto">
-                    <div class="container" id="map"></div>
+            {% if user.is_pastor == True %}
+                <div class="row ml-5">
+                    <div class="col-md-auto">
+                        <div class="container" id="map"></div>
+                    </div>
+                    <div class="col-md-auto">
+                        <h4>Search: </h4>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input class="mb-4" name="location"><br />
+                            <button class="btn btn-outline-info" type="submit">Update location</button>
+                        </form>
+                    </div>
                 </div>
-                <div class="col-md-auto">
-                    <h4>Search:</h4>
-                    <form method="POST">
-                        {% csrf_token %}
-                        <input class="mb-4" name="location"><br />
-                        <button class="btn btn-outline-info" type="submit">Update location</button>
-                    </form>
+            {% else %}
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="container" id="map"></div>
+                    </div>
                 </div>
-            </div>
+            {% endif %}
         </div>
 
         <script>

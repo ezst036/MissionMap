@@ -276,34 +276,31 @@
                     </div>
                 </div>
 
-                <div class="tab-pane active" id="pastor">
-                    <div class="container mt-3 mb-5">
-                        <div class="row ml-5">
-                            <div class="col-md-7 col-md-push-7 border-right">
-                                <p>This first line of text is not permission protected so you can see it.
-
-                                {% if user.is_pastor == True %}
-                                    <p><b>This second bold line of text is permission protected.</b>
-                                {% endif %}
-                                <p>This third line of text is not permission protected.
-                                
-                                {% include 'missionmap/snippets/homelocation.html' %}
-                            </div>
-                            <div class="mt-2 col-md-3 col-md-push-3">
-                                <h4>Search:</h4>
-                                <input class="form-control" id="form-location" type="text" name="formLocation" placeholder="Enter an address">
-                                <br />
-                                <label for="latitude">latitude</label>
-                                <input class="form-control" id="form-lat" type="text" name="formLatitude" value="{{currlat}}" disabled/>
-                                <label for="longitude">longitude</label>
-                                <input class="form-control" id="form-lon" type="text" name="formLongitude" value="{{currlon}}" disabled/>
-                                <br />
-                                <button class="btn btn-outline-info form-control" id="locationupd" onClick="homeLocation()">Update location</button>
+                {% if user.is_pastor == True %}
+                    <div class="tab-pane active" id="pastor">
+                        <div class="container mt-3 mb-5">
+                            <div class="text-center">
+                                <h4>Set church location</h4>
+                            <div>
+                            <div class="row border-top">
+                                <div class="col mt-4">
+                                    {% include 'missionmap/snippets/homelocation.html' %}
+                                </div>                                
+                                <div class="border-left mt-4 col-lg-4 col-lg-push-4">
+                                    <h4>Search:</h4>
+                                    <input class="form-control" id="form-location" type="text" name="formLocation" placeholder="Enter an address">
+                                    <br />
+                                    <label for="latitude">latitude</label>
+                                    <input class="form-control" id="form-lat" type="text" name="formLatitude" value="{{currlat}}" disabled/>
+                                    <label for="longitude">longitude</label>
+                                    <input class="form-control" id="form-lon" type="text" name="formLongitude" value="{{currlon}}" disabled/>
+                                    <br />
+                                    <button class="btn btn-outline-info form-control" id="locationupd" onClick="homeLocation()">Update location</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
+                {% endif %}
             </div>
         </div>    
 
